@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 // import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
 import { toast } from 'react-toastify';
 import Loader from '../components/Loader';
@@ -15,6 +16,7 @@ const ProfileScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -45,6 +47,15 @@ const ProfileScreen = () => {
       }
     }
   };
+
+  const handleBack = () => {
+      if (userInfo.role === 'admin') {
+        navigate('/adminpage');
+      } else {
+        navigate('/');
+      }
+  };
+
   return (
     // FormContainer: reuseable component used to format all forms
     <FormContainer> 
@@ -89,9 +100,19 @@ const ProfileScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary' className='mt-3'>
-          Update
-        </Button>
+        <Row>
+          <Col>
+            <Button type='submit' variant='primary' className='mt-3'>
+              Update
+            </Button>
+          </Col>
+
+          <Col>
+            <Button type='submit' variant='primary' className='mt-3' style={{ width: '80px', float: 'right' }} onClick={handleBack}>
+              Back
+            </Button>
+          </Col>
+        </Row>
 
         {isLoading && <Loader />}
       </Form>

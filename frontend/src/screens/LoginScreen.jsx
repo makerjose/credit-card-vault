@@ -11,7 +11,7 @@ import Loader from '../components/Loader';
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state variable
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

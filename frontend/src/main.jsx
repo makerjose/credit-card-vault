@@ -26,7 +26,8 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
 
-      <Route path="" element={<PrivateRoute />}>
+      // these are protected routes
+      <Route path="" element={<PrivateRoute />}> 
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/adminpage" element={<AdminScreen />} />
       </Route>
@@ -34,18 +35,6 @@ const router = createBrowserRouter(
     </Route>
   )
 );
-
-// const router = createBrowserRouter(
-//   createRoutesFromElements(
-//     <Route path="/" element={<App />}>
-//       <Route index={true} path="/" element={<HomeScreen />} />
-//       <Route path="/login" element={<LoginScreen />} />
-//       <Route path="/register" element={<RegisterScreen />} />
-//       <Route path="/profile" element={<PrivateRoute><ProfileScreen /></PrivateRoute>} />
-//       <Route path="/adminpage" element={<PrivateRoute><AdminScreen /></PrivateRoute>} />
-//     </Route>
-//   )
-// );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>

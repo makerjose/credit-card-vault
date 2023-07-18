@@ -37,7 +37,7 @@ const Header = () => {
             <Nav className='ms-auto'>
               {userInfo ? (
                 <>
-                  <LinkContainer to='/'>
+                  {/* <LinkContainer to='/'>
                     <Nav.Link>
                       <FaHome />  Dashboard
                     </Nav.Link>
@@ -52,18 +52,27 @@ const Header = () => {
                     <NavDropdown.Item>
                       Role: {userInfo.role}
                     </NavDropdown.Item>
-                  </NavDropdown>
+                  </NavDropdown> */}
+
+                    <Nav.Link>
+                    {userInfo.name} ({userInfo.role}) 
+                    </Nav.Link>
+
+                    <Nav.Link onClick={logoutHandler}>
+                      Logout
+                    </Nav.Link>
+                  
                 </>
               ) : (
                 <>
                   <LinkContainer to='/login'>
                     <Nav.Link>
-                      <FaSignInAlt />  Sign In
+                      <FaSignInAlt /> Sign In
                     </Nav.Link>
                   </LinkContainer>
                   <LinkContainer to='/register'>
                     <Nav.Link>
-                      <FaSignOutAlt />  Sign Up
+                      <FaSignOutAlt /> Sign Up
                     </Nav.Link>
                   </LinkContainer>
                 </>
