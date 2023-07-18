@@ -11,6 +11,7 @@ import Loader from '../components/Loader';
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // New state variable
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,28 +21,29 @@ const LoginScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (userInfo) {
-      navigate('/');
+    // Check if the user is logged in for the first time
+    if (userInfo && !isLoggedIn) {
+      setIsLoggedIn(true);
+      if (userInfo.role === 'admin') {
+        // Redirect to admin page if the user role is 'admin'
+        navigate('/adminpage');
+      } else {
+        // Redirect to home page for normal users
+        navigate('/');
+      }
     }
-  }, [navigate, userInfo]);
+  }, [navigate, userInfo, isLoggedIn]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      if (res.role === 'admin') {
-        // Redirect to admin page if the user role is 'admin'
-        navigate('/adminpage'); 
-      } else {
-        // Redirect to home page for normal users
-        navigate('/');
-      }
+      setIsLoggedIn(true); // Update the isLoggedIn state when the user logs in
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
   };
-  
 
   return (
     <FormContainer>

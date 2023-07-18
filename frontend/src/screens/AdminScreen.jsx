@@ -7,16 +7,8 @@ const AdminScreen = () => {
         <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75'>
           <h1 className='text-center mb-4'>CREDIT CARD VAULT</h1>
           <h4>This is Admin Screen</h4>
-          <p className='text-center mb-4'>
-            The user provides credit card details to be stored and encrypted in the database.
-          </p>
           <div className='d-flex'>
-            <Button variant='primary' href='/login' className='me-3'>
-              Sign In
-            </Button>
-            <Button variant='secondary' href='/register'>
-              Register
-            </Button>
+            <p>Content here</p>
           </div>
         </Card>
       </Container>
@@ -25,3 +17,5 @@ const AdminScreen = () => {
 };
 
 export default AdminScreen;
+
+
