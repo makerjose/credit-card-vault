@@ -42,7 +42,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
-    role: 'normal', // Set the role as 'normal' for new users
+    role: 'normal', // Set the default role as 'normal' for new users
   });
 
   if (user) {

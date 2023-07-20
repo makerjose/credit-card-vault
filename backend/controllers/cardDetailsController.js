@@ -6,28 +6,36 @@ import User from '../models/userModel.js';
 // @route   POST /api/users/carddetails
 // @access  Private
 const createCardDetails = asyncHandler(async (req, res) => {
-  const { holdersName, cardNumber, cvv, expDate } = req.body;
-
-  // Get the logged-in user's ID
-  const userId = req.user._id;
-
-  // Create card details
-  const cardDetails = await CardDetails.create({ holdersName, cardNumber, cvv, expDate });
-
-  if (cardDetails) {
-    // Associate the card details with the logged-in user
-    const user = await User.findById(userId);
-    if (user) {
-      user.cardDetails = cardDetails._id;
-      await user.save();
+    const { holdersName, cardNumber, cvv, expDate } = req.body;
+  
+    // Get the logged-in user's ID
+    const userId = req.user._id;
+    // console.log(userId);
+  
+    // Create card details and set the userId field
+    const cardDetails = await CardDetails.create({
+      holdersName,
+      cardNumber,
+      cvv,
+      expDate,
+      userId: userId, // Set the userId field to the user's ID
+    });
+  
+    if (cardDetails) {
+      // Associate the card details with the logged-in user
+      const user = await User.findById(userId);
+      if (user) {
+        user.cardDetails = cardDetails._id;
+        await user.save();
+      }
+  
+      res.status(201).json(cardDetails);
+    } else {
+      res.status(400);
+      throw new Error('Invalid card details data');
     }
-
-    res.status(201).json(cardDetails);
-  } else {
-    res.status(400);
-    throw new Error('Invalid card details data');
-  }
-});
+  });
+  
 
 // @desc    Update card details for the logged-in user
 // @route   PUT /api/users/carddetails/:id

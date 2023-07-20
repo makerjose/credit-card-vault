@@ -5,17 +5,17 @@ import FormContainer from '../components/FormContainer';
 
 const HomeScreen = () => {
   return (
-    <div className=' py-5'>
+    <div className=' py-3'>
       <Container className='d-flex justify-content-center'>
         <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75 me-3'>
           <h1 className='text-center mb-4'>CREDIT CARD VAULT</h1>
           <h4>Enter your credit card details</h4>
 
-          {/* <FormContainer> */}
+          <FormContainer>
             <Row>
               <CreditCardForm></CreditCardForm>
             </Row>
-          {/* </FormContainer> */}
+          </FormContainer>
         </Card>
 
       <Card className='p-5 d-flex flex-column align-items-center hero-card bg-dark'>

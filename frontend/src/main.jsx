@@ -21,13 +21,12 @@ import AdminScreen from "./screens/AdminScreen.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-
-      <Route index={true} path="/" element={<HomeScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
 
-      // these are protected routes
+      {/* private routes for only signed in users */}
       <Route path="" element={<PrivateRoute />}> 
+        <Route index={true} path="/" element={<HomeScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/adminpage" element={<AdminScreen />} />
       </Route>
