@@ -56,6 +56,19 @@ const CreditCardForm = () => {
 		}
 	};
 	
+  const handleCardNumberChange = (e, setFieldValue) => {
+    const { value } = e.target;
+    if (value.length <= 16) {
+      setFieldValue('cardNumber', value);
+    }
+  };
+
+  const handleCVVChange = (e, setFieldValue) => {
+    const { value } = e.target;
+    if (value.length <= 3) {
+      setFieldValue('cvv', value);
+    }
+  };
 	
 
 
@@ -65,7 +78,8 @@ const CreditCardForm = () => {
 			validationSchema={validationSchema}
 			onSubmit={handleSubmit}
     >
-      {({ isSubmitting }) => (
+      {/* Destructured props */}
+      {({ isSubmitting, setFieldValue, values }) => (
         <Form>
           <BootstrapForm.Group className='my-2'>
             <BootstrapForm.Label htmlFor='holdersName'>Holder's Name</BootstrapForm.Label>
@@ -75,13 +89,15 @@ const CreditCardForm = () => {
 
           <BootstrapForm.Group className='my-2'>
             <BootstrapForm.Label htmlFor='cardNumber'>Card Number</BootstrapForm.Label>
-            <Field type='text' id='cardNumber' name='cardNumber' as={BootstrapForm.Control} />
+            <Field type='text' id='cardNumber' name='cardNumber' as={BootstrapForm.Control} onChange={(e) => handleCardNumberChange(e, setFieldValue)} maxLength={16} />
+            {values.cardNumber.length === 16 && ( <div className='text-success'>Max digits reached</div> )}
             <ErrorMessage name='cardNumber' component='div' className='text-danger' />
           </BootstrapForm.Group>
 
           <BootstrapForm.Group className='my-2'>
             <BootstrapForm.Label htmlFor='cvv'>CVV</BootstrapForm.Label>
-            <Field type='text' id='cvv' name='cvv' as={BootstrapForm.Control} />
+            <Field type='text' id='cvv' name='cvv' as={BootstrapForm.Control} onChange={(e) => handleCVVChange(e, setFieldValue)} maxLength={3}/>
+            {values.cvv.length === 3 && <div className='text-success'>Max digits reached</div>}
             <ErrorMessage name='cvv' component='div' className='text-danger' />
           </BootstrapForm.Group>
 

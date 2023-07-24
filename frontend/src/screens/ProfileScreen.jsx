@@ -108,7 +108,7 @@ const ProfileScreen = () => {
           </Col>
 
           <Col>
-            <Button type='submit' variant='primary' className='mt-3' style={{ width: '80px', float: 'right' }} onClick={handleBack}>
+            <Button type='submit' variant='dark' className='mt-3' style={{ width: '80px', float: 'right' }} onClick={handleBack}>
               Back
             </Button>
           </Col>
