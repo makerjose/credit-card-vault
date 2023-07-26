@@ -1,6 +1,7 @@
 # Credit Card Vault (MERN)
 
-This is an app that collects credit card details of users and uses role based authentication to create, view, update and delete.
+This is an app that collects credit card details of users and uses role based authentication to create, view, update and delete. The account balance is updated if a user buys a product.
+(Sensitive card details are hashed)
 
 
 ## Install Dependencies (frontend & backend)
