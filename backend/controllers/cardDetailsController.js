@@ -68,24 +68,45 @@ const updateCardDetails = asyncHandler(async (req, res) => {
 // @desc    Delete card details for the logged-in user
 // @route   DELETE /api/users/carddetails/:id
 // @access  Private
+
 const deleteCardDetails = asyncHandler(async (req, res) => {
-    const { id } = req.params;
-  
-    try {
-      const cardDetails = await CardDetails.findById(id);
-      if (!cardDetails) {
-        res.status(404);
-        throw new Error('Card details not found');
-      }
-  
-      await cardDetails.remove();
-  
-      res.json({ message: 'Card details removed' });
-    } catch (error) {
-      res.status(500);
-      throw new Error('Server Error');
+  const { id } = req.params;
+
+  try {
+    console.log('Inside deleteCardDetails function');
+    const cardDetails = await CardDetails.findById(id);
+    if (!cardDetails) {
+      res.status(404);
+      throw new Error('Card details not found');
     }
-  });
+
+    await CardDetails.deleteOne({ _id: id });
+
+    res.json({ message: 'Card details removed' });
+  } catch (error) {
+    console.log('Error in deleteCardDetails:', error);
+    res.status(500).json({ error: 'Server Error' }); // Return an error response
+  }
+});
+
+// @desc    Fetch card details for the logged-in user
+// @route   GET /api/users/carddetails
+// @access  Private
+const getCardDetails = asyncHandler(async (req, res) => {
+  try {
+    const cardDetails = await CardDetails.find({});
+    if (!cardDetails) {
+      res.status(404);
+      throw new Error('Card details not found');
+    }
+
+    res.json(cardDetails);
+  } catch (error) {
+    res.status(500);
+    throw new Error('Server Error');
+  }
+});
 
 
-export { createCardDetails, updateCardDetails, deleteCardDetails };
+
+export { createCardDetails, updateCardDetails, deleteCardDetails, getCardDetails };

@@ -1,5 +1,6 @@
 import React, { useState, useReducer } from 'react';
 import { Card, Button, ListGroup, Container, Row, Col } from 'react-bootstrap';
+import {  Nav, Navbar } from 'react-bootstrap';
 
 const shoesData = [
   { id: 1, name: 'Cap', price: 1000 },
@@ -51,45 +52,63 @@ const cartReducer = (state, action) => {
     };
   
     return (
-        <Container>
-        <Row>
-            <Card className="mb-3">
-                <Card.Body>
-                    <Card.Title>Bank Balance</Card.Title>
-                    <Card.Text>Price: KES. </Card.Text>
-                </Card.Body>
-            </Card>
-        </Row>
-        <Row className="my-3">
-          {shoesData.map((item) => (
-            <Col key={item.id} xs={12} md={3}>
+      <Container className='d-flex justify-content-center'>
+
+        <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75 me-3'>
+          <Row>
               <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>{item.name}</Card.Title>
-                  <Card.Text>Price: KES. {item.price}</Card.Text>
-                  <Button variant="dark" onClick={() => handleAddToCart(item)}>
-                    Add
-                  </Button>
-                </Card.Body>
+                  <Card.Body>
+                      <Card.Title>Bank Balance</Card.Title>
+                      <Card.Text>Price: KES. </Card.Text>
+                  </Card.Body>
               </Card>
-            </Col>
-          ))}
-        </Row>
-        <h3>Shopping Cart</h3>
-        <ListGroup>
-          {state.cartItems.map((item) => (  
-            <ListGroup.Item key={item.id}>
-              {item.name} - ${item.price}
-              <Button variant="danger" className="ms-2" onClick={() => handleRemoveFromCart(item)} style={{ width: '80px', float: 'right' }}>
-                Remove
-              </Button>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-        <h4>Total Price: KES. {state.totalPrice}</h4>  
-        <Button variant="dark" className="ms-2" >
-            Checkout
-        </Button>
+          </Row>
+          <Row className="my-3">
+            {shoesData.map((item) => (
+              <Col key={item.id} xs={12} md={3}>
+                <Card className="mb-3">
+                  <Card.Body>
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Text>Price: KES. {item.price}</Card.Text>
+                    <Button variant="dark" onClick={() => handleAddToCart(item)}>
+                      Add
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+          <h3>Shopping Cart</h3>
+          <ListGroup>
+            {state.cartItems.map((item) => (  
+              <ListGroup.Item key={item.id}>
+                {item.name} - ${item.price}
+                <Button variant="danger" className="ms-2" onClick={() => handleRemoveFromCart(item)} style={{ width: '90px', float: 'right' }}>
+                  Remove
+                </Button>
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
+          <h4>Total Price: KES. {state.totalPrice}</h4>  
+          <Button variant="dark" className="ms-2" >
+              Checkout
+          </Button>
+        </Card>
+
+        <Card className='p-5 d-flex flex-column align-items-center hero-card bg-dark'>
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            {/* <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand> */}
+            {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
+            <Navbar.Collapse id="navbar-nav">
+              <Nav className="flex-column">
+                <Nav.Link href="/">Dashboard</Nav.Link>
+                <Nav.Link href="shoppingcart">Shopping Cart</Nav.Link>
+                <Nav.Link href="profile">My profile</Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+        </Card>
+
       </Container>
     );
   };

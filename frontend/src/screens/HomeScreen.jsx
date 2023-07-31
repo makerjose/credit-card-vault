@@ -1,5 +1,4 @@
 import { Container, Card, Navbar, Nav, Row } from 'react-bootstrap';
-import { FaSignInAlt, FaSignOutAlt, FaHome } from 'react-icons/fa';
 import CreditCardForm from '../components/CreditCardForm';
 import FormContainer from '../components/FormContainer';
 
@@ -24,9 +23,8 @@ const HomeScreen = () => {
           {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
           <Navbar.Collapse id="navbar-nav">
             <Nav className="flex-column">
-              <FaHome /><Nav.Link href="/">Dashboard</Nav.Link>
+              <Nav.Link href="/">Dashboard</Nav.Link>
               <Nav.Link href="shoppingcart">Shopping Cart</Nav.Link>
-              <Nav.Link href="updateCardDetails">Update Card Details</Nav.Link>
               <Nav.Link href="profile">My profile</Nav.Link>
             </Nav>
           </Navbar.Collapse>
