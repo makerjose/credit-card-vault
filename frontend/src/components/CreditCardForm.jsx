@@ -2,14 +2,12 @@ import { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { Button, Form as BootstrapForm } from 'react-bootstrap';
-import { useCreateCardDetailsMutation } from '../slices/cardDetailsApiSlice';
+import { createCardDetails } from '../api/cardApi'; // Import createCardDetails API function
 import Loader from '../components/Loader';
 import { toast } from 'react-toastify';
 
-
 const CreditCardForm = () => {
 
-  const [createCardDetails, { isLoading }] = useCreateCardDetailsMutation();
   const [formSubmitted, setFormSubmitted] = useState(false);
   
   const initialValues = {
@@ -28,20 +26,50 @@ const CreditCardForm = () => {
     expDate: Yup.string().required('Expiration Date is required'),
   });
 
-	const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-		try {
-			console.log('Form Values:', values); // Log the form values just before the API request
-			console.log('Token:', document.cookie); // Log the token just before the API request
-			await createCardDetails(values).unwrap();
-			setFormSubmitted(true);
-			toast.success('Credit card details submitted successfully!');
-			resetForm();
-		} catch (error) {
-			toast.error('Error submitting credit card details');
-		} finally {
-			setSubmitting(false);
-		}
-	};
+  // const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  //   try {
+  //     console.log('Form Values:', values); // Log the form values just before the API request
+  //     await createCardDetails(values); // Check if `values` is correct here
+  //     setFormSubmitted(true);
+  //     toast.success('Credit card details submitted successfully!');
+  //     resetForm();
+  //   } catch (error) {
+  //     console.error('Error submitting credit card details:', error.message);
+  //     toast.error('Error submitting credit card details');
+  //   } finally {
+  //     setSubmitting(false);
+  //   }
+  // };
+
+const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  try {
+    // After successful login, get the userInfo from local storage
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    // Check if userInfo contains the _id
+    if (userInfo && userInfo._id) {
+      // Create the cardData object with the _id from userInfo
+      const cardData = {
+        ...values, // Spread the form values into the cardData object
+        userId: userInfo._id, // Add the userId to the cardData object
+      };
+
+      // Call the createCardDetails function and pass cardData
+      await createCardDetails(cardData);
+      setFormSubmitted(true);
+      toast.success('Credit card details submitted successfully!');
+      resetForm();
+    } else {
+      throw new Error('User information not found. Please log in.');
+    }
+  } catch (error) {
+    console.error('Error submitting credit card details:', error.message);
+    toast.error('Error submitting credit card details');
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 	
   const handleCardNumberChange = (e, setFieldValue) => {
     const { value } = e.target;
@@ -56,7 +84,6 @@ const CreditCardForm = () => {
       setFieldValue('cvv', value);
     }
   };
-	
 
 
   return (
@@ -99,7 +126,7 @@ const CreditCardForm = () => {
           </Button>
 
           {/* {isSubmitting && <div className='mt-3'>Submitting...</div>} */}
-					{isLoading && <Loader />}
+					{/* {isLoading && <Loader />} */}
 					{formSubmitted && <div className='mt-3'>Form submitted successfully!</div>}
         </Form>
       )}

@@ -2,28 +2,28 @@
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { FaSignInAlt, FaSignOutAlt, FaHome } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useLogoutMutation } from '../slices/usersApiSlice';
-import { logout } from '../slices/authSlice';
+import { logoutUserApi } from '../api/userApi';
+// import { useNavigate } from 'react-router-dom';
+
 
 const Header = () => {
-  const { userInfo } = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [logoutApiCall] = useLogoutMutation();
+ 
 
   const logoutHandler = async () => {
     try {
-      await logoutApiCall().unwrap();
-      dispatch(logout());
+      await logoutUserApi();
+      localStorage.removeItem('userInfo'); // Remove user data from local storage
       navigate('/login');
     } catch (err) {
       console.error(err);
     }
   };
+
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
   return (
     <header>
@@ -32,7 +32,7 @@ const Header = () => {
           {/* <LinkContainer to='/'> */}
             <Navbar.Brand>Credit Card Vault</Navbar.Brand>
           {/* </LinkContainer> */}
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Toggle aria-controls='basic-navbar-navss' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
               {userInfo ? (
@@ -86,3 +86,5 @@ const Header = () => {
 };
 
 export default Header;
+
+

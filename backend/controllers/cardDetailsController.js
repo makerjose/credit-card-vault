@@ -5,37 +5,71 @@ import User from '../models/userModel.js';
 // @desc    Create new card details for the logged-in user
 // @route   POST /api/users/carddetails
 // @access  Private
+// const createCardDetails = asyncHandler(async (req, res) => {
+//     const { holdersName, cardNumber, cvv, expDate } = req.body;
+  
+//     // Get the logged-in user's ID
+//     const userId = req.user._id;
+//     // console.log(userId);
+  
+//     // Create card details and set the userId field
+//     const cardDetails = await CardDetails.create({
+//       holdersName,
+//       cardNumber,
+//       cvv,
+//       expDate,
+//       userId: userId, // Set the userId field to the user's ID
+//     });
+  
+//     if (cardDetails) {
+//       // Associate the card details with the logged-in user
+//       const user = await User.findById(userId);
+//       if (user) {
+//         user.cardDetails = cardDetails._id;
+//         await user.save();
+//       }
+  
+//     // Include the userId in the response
+//     res.status(201).json({ ...cardDetails.toObject(), userId: userId });
+//     } else {
+//       res.status(400);
+//       throw new Error('Invalid card details data');
+//     }
+//   });
+  
+
+// @desc    Create card details
+// @route   POST /api/cardDetails
+// @access  Public
 const createCardDetails = asyncHandler(async (req, res) => {
-    const { holdersName, cardNumber, cvv, expDate } = req.body;
-  
-    // Get the logged-in user's ID
-    const userId = req.user._id;
-    // console.log(userId);
-  
-    // Create card details and set the userId field
+
+  // Get the card data from the request body
+  const { holdersName, cardNumber, cvv, expDate, userId } = req.body;
+
+  console.log('Request Body:', req.body);
+
+  try {
+    // Create a new card details entry in the database with the user ID
     const cardDetails = await CardDetails.create({
       holdersName,
       cardNumber,
       cvv,
       expDate,
-      userId: userId, // Set the userId field to the user's ID
+      userId,
     });
-  
+
     if (cardDetails) {
-      // Associate the card details with the logged-in user
-      const user = await User.findById(userId);
-      if (user) {
-        user.cardDetails = cardDetails._id;
-        await user.save();
-      }
-  
       res.status(201).json(cardDetails);
     } else {
       res.status(400);
       throw new Error('Invalid card details data');
     }
-  });
-  
+  } catch (error) {
+    console.error('Error creating card details:', error.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 // @desc    Update card details for the logged-in user
 // @route   PUT /api/users/carddetails/:id

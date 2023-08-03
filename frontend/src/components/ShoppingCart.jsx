@@ -1,6 +1,7 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect } from 'react';
 import { Card, Button, ListGroup, Container, Row, Col } from 'react-bootstrap';
 import {  Nav, Navbar } from 'react-bootstrap';
+import axios from 'axios';
 
 const shoesData = [
   { id: 1, name: 'Cap', price: 1000 },
@@ -42,6 +43,27 @@ const cartReducer = (state, action) => {
     };
   
     const [state, dispatch] = useReducer(cartReducer, initialState);
+    const [cardDetails, setCardDetails] = useState([]);
+  
+    useEffect(() => {
+      // Fetch card details from the server
+      fetchCardDetailsFromDB();
+    }, []);
+  
+    const fetchCardDetailsFromDB = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/cardDetails');
+  
+        // geet the current user ID from the localStorage 
+        const userId = JSON.parse(localStorage.getItem('userInfo'))._id;
+  
+        // Filter card details based on the user ID
+        const userCardDetails = response.data.filter((card) => card.userId === userId);
+        setCardDetails(userCardDetails); // Set the filtered data into the state
+      } catch (error) {
+        console.error('Error fetching card details:', error);
+      }
+    };
   
     const handleAddToCart = (item) => {
       dispatch({ type: 'ADD_ITEM', payload: item });
@@ -56,12 +78,24 @@ const cartReducer = (state, action) => {
 
         <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75 me-3'>
           <Row>
+            {/* <Col>
               <Card className="mb-3">
                   <Card.Body>
-                      <Card.Title>Bank Balance</Card.Title>
-                      <Card.Text>Price: KES. </Card.Text>
+                          <Card.Title>Account Balance</Card.Title>
+                          <Card.Text>Price: KES. </Card.Text>
+                      </Card.Body>
+                  </Card>
+            </Col> */}
+            <Col>
+              <Card className="mb-3">
+                  <Card.Body>
+                      <Card.Title>My Card Details</Card.Title>
+                      <p>Holders Name: {cardDetails.holdersName}</p>
+                      <p>Card Number: {cardDetails.cardNumber}</p>
+                      <p>Cvv: {cardDetails.cvv}</p>
                   </Card.Body>
               </Card>
+            </Col>
           </Row>
           <Row className="my-3">
             {shoesData.map((item) => (

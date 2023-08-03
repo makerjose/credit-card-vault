@@ -27,7 +27,8 @@ const router = createBrowserRouter(
 
       {/* private routes for only signed in users */}
       <Route path="" element={<PrivateRoute />}> 
-        <Route index={true} path="/" element={<HomeScreen />} />
+        {/* <Route index={true} path="/" element={<HomeScreen />} /> */}
+        <Route path="/" element={<HomeScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/adminpage" element={<AdminScreen />} />
         <Route path="/shoppingcart" element={<ShoppingCart />} />
