@@ -2,51 +2,13 @@ import asyncHandler from 'express-async-handler';
 import CardDetails from '../models/cardDetailsModel.js';
 import User from '../models/userModel.js';
 
-// @desc    Create new card details for the logged-in user
-// @route   POST /api/users/carddetails
-// @access  Private
-// const createCardDetails = asyncHandler(async (req, res) => {
-//     const { holdersName, cardNumber, cvv, expDate } = req.body;
-  
-//     // Get the logged-in user's ID
-//     const userId = req.user._id;
-//     // console.log(userId);
-  
-//     // Create card details and set the userId field
-//     const cardDetails = await CardDetails.create({
-//       holdersName,
-//       cardNumber,
-//       cvv,
-//       expDate,
-//       userId: userId, // Set the userId field to the user's ID
-//     });
-  
-//     if (cardDetails) {
-//       // Associate the card details with the logged-in user
-//       const user = await User.findById(userId);
-//       if (user) {
-//         user.cardDetails = cardDetails._id;
-//         await user.save();
-//       }
-  
-//     // Include the userId in the response
-//     res.status(201).json({ ...cardDetails.toObject(), userId: userId });
-//     } else {
-//       res.status(400);
-//       throw new Error('Invalid card details data');
-//     }
-//   });
-  
-
-// @desc    Create card details
-// @route   POST /api/cardDetails
-// @access  Public
+// Create card details
 const createCardDetails = asyncHandler(async (req, res) => {
 
   // Get the card data from the request body
-  const { holdersName, cardNumber, cvv, expDate, userId } = req.body;
+  const { holdersName, cardNumber, cvv, expDate, userId, } = req.body;
 
-  console.log('Request Body:', req.body);
+  // console.log('Request Body:', req.body);
 
   try {
     // Create a new card details entry in the database with the user ID
@@ -56,6 +18,7 @@ const createCardDetails = asyncHandler(async (req, res) => {
       cvv,
       expDate,
       userId,
+      accountBal: 20000,
     });
 
     if (cardDetails) {
@@ -71,9 +34,7 @@ const createCardDetails = asyncHandler(async (req, res) => {
 });
 
 
-// @desc    Update card details for the logged-in user
-// @route   PUT /api/users/carddetails/:id
-// @access  Private
+//Update card details for the logged-in user
 const updateCardDetails = asyncHandler(async (req, res) => {
     const { holdersName, cardNumber, cvv, expDate } = req.body;
     const { id } = req.params;
@@ -99,10 +60,7 @@ const updateCardDetails = asyncHandler(async (req, res) => {
     }
   });
 
-// @desc    Delete card details for the logged-in user
-// @route   DELETE /api/users/carddetails/:id
-// @access  Private
-
+//Delete card details for the logged-in user
 const deleteCardDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -123,9 +81,34 @@ const deleteCardDetails = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Fetch card details for the logged-in user
-// @route   GET /api/users/carddetails
-// @access  Private
+// Function to update the account balance
+const updateAccountBalance = async (req, res) => {
+  const { userId, totalPrice } = req.body;
+
+  try {
+    // Find the card details for the given user ID
+    const cardDetails = await CardDetails.findOne({ userId });
+
+    if (!cardDetails) {
+      res.status(404).json({ message: 'Card details not found' });
+      return;
+    }
+
+    // Deduct the totalPrice from the account balance
+    const updatedBalance = cardDetails.accountBal - totalPrice;
+
+    // Update the account balance in the database
+    cardDetails.accountBal = updatedBalance;
+    await cardDetails.save();
+
+    res.json({ message: 'Account balance updated successfully', newBalance: updatedBalance });
+  } catch (error) {
+    console.error('Error updating account balance:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Fetch card details for the logged-in user
 const getCardDetails = asyncHandler(async (req, res) => {
   try {
     const cardDetails = await CardDetails.find({});
@@ -142,5 +125,4 @@ const getCardDetails = asyncHandler(async (req, res) => {
 });
 
 
-
-export { createCardDetails, updateCardDetails, deleteCardDetails, getCardDetails };
+export { createCardDetails, updateCardDetails, deleteCardDetails, getCardDetails, updateAccountBalance };

@@ -26,20 +26,7 @@ const CreditCardForm = () => {
     expDate: Yup.string().required('Expiration Date is required'),
   });
 
-  // const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-  //   try {
-  //     console.log('Form Values:', values); // Log the form values just before the API request
-  //     await createCardDetails(values); // Check if `values` is correct here
-  //     setFormSubmitted(true);
-  //     toast.success('Credit card details submitted successfully!');
-  //     resetForm();
-  //   } catch (error) {
-  //     console.error('Error submitting credit card details:', error.message);
-  //     toast.error('Error submitting credit card details');
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
+
 
 const handleSubmit = async (values, { setSubmitting, resetForm }) => {
   try {
@@ -50,7 +37,7 @@ const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     if (userInfo && userInfo._id) {
       // Create the cardData object with the _id from userInfo
       const cardData = {
-        ...values, // Spread the form values into the cardData object
+        ...values, 
         userId: userInfo._id, // Add the userId to the cardData object
       };
 

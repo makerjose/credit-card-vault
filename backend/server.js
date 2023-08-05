@@ -61,6 +61,15 @@ import cors from 'cors';
 import session from 'express-session'; // Add this import for session management
 import passport from 'passport'; // Import passport here
 
+// const express = require('express');
+// const app = express();
+
+// // Enable detailed error logs
+// app.use((err, req, res, next) => {
+//   console.error(err.stack);
+//   res.status(500).send('Internal Server Error');
+// });
+
 import initializePassport from './config/passportConfig.js';
 
 dotenv.config();

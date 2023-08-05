@@ -5,6 +5,7 @@ import {
   updateCardDetails,
   deleteCardDetails,
   getCardDetails,
+  updateAccountBalance,
 } from '../controllers/cardDetailsController.js';
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get('/', getCardDetails);
 router.post('/', createCardDetails);
 router.put('/:id', updateCardDetails);
 router.delete('/temp/:id', deleteCardDetails);
+router.put('/:userId/updateBalance', updateAccountBalance);
 
 export default router;

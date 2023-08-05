@@ -1,9 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 
-// @desc    Auth user & get user data
-// @route   POST /api/users/auth
-// @access  Public
+// Auth user & get user data
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -22,9 +20,7 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Register a new user
-// @route   POST /api/users
-// @access  Public
+//Register a new user
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -55,9 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
+// Get user profile
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -73,9 +67,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
+// Update user profile
+
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -100,12 +93,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Logout user / clear cookie
-// @route   POST /api/users/logout
-// @access  Public
+//Logout user / clear cookie
 const logoutUser = (req, res) => {
-  // You can clear any session or token data here, if applicable
-  // For example, if you are using JWT, you can remove the token from the cookies
   res.cookie('jwt', '', {
     httpOnly: true,
     expires: new Date(0),

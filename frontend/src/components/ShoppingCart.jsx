@@ -10,7 +10,6 @@ const shoesData = [
   { id: 4, name: 'Blazer', price: 4000 },
 ];
 
-
 const cartReducer = (state, action) => {
     switch (action.type) {
       case 'ADD_ITEM':
@@ -58,12 +57,52 @@ const cartReducer = (state, action) => {
         const userId = JSON.parse(localStorage.getItem('userInfo'))._id;
   
         // Filter card details based on the user ID
-        const userCardDetails = response.data.filter((card) => card.userId === userId);
+        const userCardDetails = response.data.find((card) => card.userId === userId); //using .find() instead of .filter()
         setCardDetails(userCardDetails); // Set the filtered data into the state
+        console.log("Fetched card details: ", userCardDetails)
       } catch (error) {
         console.error('Error fetching card details:', error);
       }
     };
+
+    const handleCheckout = async () => {
+      if (state.totalPrice === 0) {
+        alert('Your cart is empty! Please add items before checking out.');
+        return;
+      }
+    
+      if (state.totalPrice > cardDetails.accountBal) {
+        alert('Insufficient balance! Please add funds to your account or remove items from your cart.');
+        return;
+      }
+    
+      // Show a confirmation message to the user
+      const confirmPurchase = window.confirm('Are you sure you want to checkout?');
+    
+      if (confirmPurchase) {
+        try {
+          // Make a PUT request to update the account balance
+          const response = await axios.put(`http://localhost:5000/api/cardDetails/${cardDetails.userId}/updateBalance`, {
+            userId: cardDetails.userId,
+            totalPrice: state.totalPrice,
+          });
+    
+          // Update the account balance in the state with the new value from the server
+          setCardDetails((prevCardDetails) => ({
+            ...prevCardDetails,
+            accountBal: response.data.newBalance,
+          }));
+    
+          // Show a success message to the user (you can use a toast or alert)
+          alert('Purchase successful!');
+        } catch (error) {
+          console.error('Error updating account balance:', error);
+          // Show an error message to the user (you can use a toast or alert)
+          alert('Error updating account balance. Please try again.');
+        }
+      }
+    };
+    
   
     const handleAddToCart = (item) => {
       dispatch({ type: 'ADD_ITEM', payload: item });
@@ -78,22 +117,15 @@ const cartReducer = (state, action) => {
 
         <Card className='p-5 d-flex flex-column align-items-center hero-card bg-light w-75 me-3'>
           <Row>
-            {/* <Col>
-              <Card className="mb-3">
-                  <Card.Body>
-                          <Card.Title>Account Balance</Card.Title>
-                          <Card.Text>Price: KES. </Card.Text>
-                      </Card.Body>
-                  </Card>
-            </Col> */}
             <Col>
               <Card className="mb-3">
-                  <Card.Body>
-                      <Card.Title>My Card Details</Card.Title>
-                      <p>Holders Name: {cardDetails.holdersName}</p>
-                      <p>Card Number: {cardDetails.cardNumber}</p>
-                      <p>Cvv: {cardDetails.cvv}</p>
-                  </Card.Body>
+                <Card.Body>
+                  <Card.Title>My Card Details</Card.Title>
+                  <p>Holders Name: <strong>{cardDetails.holdersName}</strong></p>
+                  <p>Card Number: <strong>{cardDetails.cardNumber}</strong></p>
+                  <p>Cvv: <strong>{cardDetails.cvv}</strong></p>
+                  <p><h6>Account Balance: <strong>KES. {cardDetails.accountBal}</strong></h6></p>
+                </Card.Body>
               </Card>
             </Col>
           </Row>
@@ -124,7 +156,7 @@ const cartReducer = (state, action) => {
             ))}
           </ListGroup>
           <h4>Total Price: KES. {state.totalPrice}</h4>  
-          <Button variant="dark" className="ms-2" >
+          <Button variant="dark" className="ms-2" onClick={handleCheckout}>
               Checkout
           </Button>
         </Card>
